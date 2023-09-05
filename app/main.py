@@ -4,6 +4,11 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+class SHotel(BaseModel):
+    address: str
+    name: str
+    stars: int
+
 
 @app.get('/hotels')
 def get_hotels(
@@ -13,8 +18,16 @@ def get_hotels(
         has_spa: bool = None,
         stars: int = Query(None, ge=1, le=5)
 
-):
-    return date_from, date_to
+) -> list[SHotel]:
+    hotels = [
+        {
+            'address': 'ул. Гагарина ,1 , Алтай',
+            'name': 'Les Resort',
+            'stars': 5
+
+        }
+    ]
+    return hotels
 
 class SBooking(BaseModel):
     room_id: int
