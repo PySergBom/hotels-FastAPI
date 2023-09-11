@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
 
     @property
     def DATABASE_URL(self):
@@ -17,5 +19,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-
-
