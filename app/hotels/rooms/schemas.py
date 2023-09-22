@@ -14,3 +14,11 @@ class SRoom(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class SRoomInfo(SRoom):
+    total_cost: int
+    rooms_left: int
+
+    class Config:
+        orm_mode = True

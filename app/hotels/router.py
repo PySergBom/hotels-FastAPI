@@ -24,4 +24,3 @@ async def get_left_rooms_in_hotels_with_filter(
         date_to: date,
 ) -> List[SHotel]:
     return await HotelDAO.find_left(location, date_from, date_to)
-
