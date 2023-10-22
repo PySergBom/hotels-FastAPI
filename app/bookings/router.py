@@ -1,11 +1,10 @@
 from datetime import date
 
-from fastapi import APIRouter, Depends
-
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.bookings.dao import BookingDAO
 from app.bookings.schemas import SBooking
-from app.exceptions import RoomCannotBeBooked
+from app.exceptions import RoomCannotBeBooked, UserDoesNotHaveAccessRightsException
 from app.users.dependencies import get_current_user
 from app.users.models import Users
 
@@ -20,9 +19,17 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
     return await BookingDAO.find_all(user_id=user.id)
 
 
-@router.get('/{booking_id}')
-async def get_bookings(booking_id: int):
-    return await BookingDAO.find_by_id(booking_id)
+@router.get('/{booking_id}',)
+async def get_bookings(
+        booking_id: int,
+        user: Users = Depends(get_current_user),
+) -> SBooking:
+    booking = await BookingDAO.find_by_id(booking_id)
+    if not booking:
+        raise HTTPException(status_code=404)
+    if booking.user_id != user.id:
+        raise UserDoesNotHaveAccessRightsException
+    return booking
 
 
 @router.post('')
@@ -38,6 +45,7 @@ async def add_booking(
 @router.delete('/{booking_id}')
 async def delete_booking(
         booking_id: int,
-        user: Users = Depends(get_current_user),):
+        user: Users = Depends(get_current_user),
+):
     current_user = user
     return await BookingDAO.delete(id=booking_id, user_id=current_user.id)

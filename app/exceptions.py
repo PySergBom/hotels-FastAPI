@@ -38,6 +38,11 @@ class UserIsNotPresentException(BookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
 
 
+class UserDoesNotHaveAccessRightsException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = 'User does not have access rights'
+
+
 class RoomCannotBeBooked(BookingException):
     status_code = status.HTTP_409_CONFLICT
     detail = 'Room can not booked'
